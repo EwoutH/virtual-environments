@@ -1,5 +1,5 @@
 param(
-    [string]$PackerLogPath = "$env:HOME/Downloads/temp2/packer.txt",
+    [string]$PackerLogPath = "$env:HOME/Downloads/temp2/packer-mac.txt",
     [string]$PrefixToPathTrim = "",
     [int]$PrintTopNLongest = 25
 )
@@ -25,7 +25,7 @@ function Complete-ProvisionerItem {
     param([object]$Provisioner, [string]$EndTime)
 
     $Provisioner.EndTime = [DateTime]::Parse($EndTime)
-    $Provisioner.Duration = New-TimeSpan –Start $Provisioner.StartTime –End $Provisioner.EndTime
+    $Provisioner.Duration = New-TimeSpan -Start $Provisioner.StartTime -End $Provisioner.EndTime
 }
 
 function Add-ProvisionerSubItem {
@@ -34,7 +34,7 @@ function Add-ProvisionerSubItem {
     $lastItem = $Provisioner.SubItems | Select-Object -Last 1
     if ($lastItem) {
         $lastItem.EndTime = [DateTime]::Parse($DateTime)
-        $lastItem.Duration = New-TimeSpan –Start $lastItem.StartTime –End $lastItem.EndTime
+        $lastItem.Duration = New-TimeSpan -Start $lastItem.StartTime -End $lastItem.EndTime
     }
 
     if ($Command) {
@@ -112,7 +112,7 @@ $provisionersList | ForEach-Object {
 Write-Host "Total provisioners time: $totalProvisionersTime"
 
 if ($PrintTopNLongest -and ($PrintTopNLongest -gt 0)) {
-    Write-Host "`n`nTop longest scripts:"
+    Write-Host "`n`nTop longest provisioners:"
     $provisionersList | ForEach-Object {
         if ($_.SubItems.Length -gt 0) { $_.SubItems } else { @{ Command = $_.ProvisionerType; Duration = $_.Duration } }
     } | Sort-Object -Property Duration | Select-Object -Last $PrintTopNLongest | ForEach-Object {
